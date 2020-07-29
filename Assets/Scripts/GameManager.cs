@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
 
     public int pointer;
 
-    bool playerTurn = false;
-
     public Text playerAttackText = default;
     public Text playerMagicText = default;
     public Text playerItemText = default;
@@ -36,6 +34,8 @@ public class GameManager : MonoBehaviour
     public Slider enemySlider = default;
 
     public Slider playerATB = default;
+
+    public Slider enemyATB = default;
 
     public float ATBspeed = 0.1f;
 
@@ -55,9 +55,16 @@ public class GameManager : MonoBehaviour
         playerSlider = GameObject.Find("PlayerHp").GetComponent<Slider>();
         enemySlider = GameObject.Find("EnemyHp").GetComponent<Slider>();
 
-        playerATB = GameObject.Find("ATB").GetComponent<Slider>();
+        playerATB = GameObject.Find("PlayerATB").GetComponent<Slider>();
+        enemyATB = GameObject.Find("EnemyATB").GetComponent<Slider>();
 
-        playerATB.value = 0;
+        playerATB.value = Random.value;
+
+        Debug.Log(playerATB.value);
+
+        enemyATB.value = Random.value;
+
+        Debug.Log(enemyATB.value);
 
         playerMaxHp = playerScript.playerHp;
         enemyMaxHp = enemyScript.enemyHp;
@@ -69,8 +76,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("エネミーHP" + enemyHp);
 
         pointer = pointerScript.count;
-
-        playerTurn = true;
     }
 
     void Update()
@@ -78,6 +83,8 @@ public class GameManager : MonoBehaviour
         pointer = pointerScript.count;
 
         playerATB.value += ATBspeed * Time.deltaTime;
+
+        enemyATB.value += ATBspeed * Time.deltaTime;
 
 
         attackBotton.enabled = false;
@@ -103,24 +110,12 @@ public class GameManager : MonoBehaviour
                 Item();
             }
         }
-        else
+
+        if (enemyATB.value >= 1)
         {
-
-
-            //EnemyAttack();
-            //if (enemyHp > 0)
-            //{
-            //    Invoke("EnemyAttack", 1.0f);
-            //}
-
-            //PlayerTurn();
+            enemyATB.value = 1;
+            EnemyAttack();
         }
-
-        if (playerTurn)
-        {
-            
-        }
-        
     }
 
     public void Attack()
@@ -137,7 +132,6 @@ public class GameManager : MonoBehaviour
             Win();
         }
         playerATB.value = 0;
-        EnemyTurn();
     }
 
     public void Magic()
@@ -154,7 +148,6 @@ public class GameManager : MonoBehaviour
             Win();
         }
         playerATB.value = 0;
-        EnemyTurn();
     }
 
     public void Item()
@@ -165,7 +158,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("プレイヤーアイテム" + playerHp);
         playerSlider.value = (float)playerHp / (float)playerMaxHp;
         playerATB.value = 0;
-        EnemyTurn();
     }
 
     public void EnemyAttack()
@@ -181,18 +173,10 @@ public class GameManager : MonoBehaviour
             playerScript.Destroy();
             GameOver();
         }
-        PlayerTurn();
+        enemyATB.value = 0;
     }
 
-    public void PlayerTurn()
-    {
-        playerTurn = true;
-    }
 
-    public void EnemyTurn()
-    {
-        playerTurn = false;
-    }
     void DeleteText()
     {
         playerAttackText.text = "";

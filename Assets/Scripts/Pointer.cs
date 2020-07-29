@@ -20,7 +20,7 @@ public class Pointer : MonoBehaviour
         magicPointer = GameObject.Find("MagicPointer").GetComponent<Text>();
         itemPointer = GameObject.Find("ItemPointer").GetComponent<Text>();
 
-        playerATB = GameObject.Find("ATB").GetComponent<Slider>();
+        playerATB = GameObject.Find("PlayerATB").GetComponent<Slider>();
     }
 
     void Update()
