@@ -9,7 +9,7 @@ public class CameraController3 : MonoBehaviour
 
     void Start()
     {
-        targetObj = GameObject.Find("Player");
+        targetObj = GameObject.Find("FieldPlayer");
         targetPos = targetObj.transform.position;
     }
 

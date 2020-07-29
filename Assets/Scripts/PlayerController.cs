@@ -25,7 +25,11 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody m_rb;
 
-    public int maxHp = default;
+    public int maxHp = default; //プレイヤーの最大HP
+    public int currentHp = default;
+    public int maxMp = default; //プレイヤーの最大MP
+    public int atk = default; //プレイヤーのATK
+    public int def = default; //プレイヤーのDEF
 
     void Start()
     {
@@ -33,6 +37,10 @@ public class PlayerController : MonoBehaviour
         m_anim = GetComponent<Animator>();
 
         maxHp = 10;
+        currentHp = maxHp;
+        maxMp = 5;
+        atk = 1;
+        def = 1;
     }
 
     void Update()
@@ -118,6 +126,11 @@ public class PlayerController : MonoBehaviour
                 m_anim.SetBool("IsGrounded", false);
             }
         }
+
+        if (currentHp <= 0)
+        {
+            Destroy();
+        }
     }
 
     /// <summary>
@@ -133,6 +146,11 @@ public class PlayerController : MonoBehaviour
         Debug.DrawLine(start, end); // 動作確認用に Scene ウィンドウ上で線を表示する
         bool isGrounded = Physics.Linecast(start, end); // 引いたラインに何かがぶつかっていたら true とする
         return isGrounded;
+    }
+
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
     }
 }
 

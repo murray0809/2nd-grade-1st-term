@@ -8,14 +8,14 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject enemy;
 
-    PlayerBattleController playerScript;
+    PlayerController playerScript;
     EnemyController enemyScript;
     Pointer pointerScript;
 
-    int playerHp;
+    int playerHp; //プレイヤーの現在HP
     int enemyHp;
 
-    int playerMaxHp;
+    int playerMaxHp; //プレイヤーの最大HP
     int enemyMaxHp;
 
     public int pointer;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.Find("Player");
         enemy = GameObject.Find("Enemy");
 
-        playerScript = player.GetComponent<PlayerBattleController>();
+        playerScript = player.GetComponent<PlayerController>(); //PlayerBattleControllerの取得
         enemyScript = enemy.GetComponent<EnemyController>();
         pointerScript = GetComponent<Pointer>();
 
@@ -66,10 +66,10 @@ public class GameManager : MonoBehaviour
 
         Debug.Log(enemyATB.value);
 
-        playerMaxHp = playerScript.playerHp;
+        playerMaxHp = playerScript.maxHp; //プレイヤーの最大HPの取得
         enemyMaxHp = enemyScript.enemyHp;
 
-        playerHp = playerScript.playerHp;
+        playerHp = playerScript.maxHp; //プレイヤーの現在HPの取得
         enemyHp = enemyScript.enemyHp;
 
         Debug.Log("プレイヤーHP" + playerHp);
