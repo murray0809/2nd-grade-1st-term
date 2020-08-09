@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,20 +13,9 @@ public class GameManager : MonoBehaviour
     PlayerController playerScript;
     EnemyController enemyScript;
     Pointer pointerScript;
-
-    int playerHp; //プレイヤーの現在HP
-    int enemyHp;
-
-    int playerMaxHp; //プレイヤーの最大HP
-    int enemyMaxHp;
+    PlayerBattleController playerScript2;
 
     public int pointer;
-
-    public Text playerAttackText = default;
-    public Text playerMagicText = default;
-    public Text playerItemText = default;
-
-    public Text enemyText = default;
 
     public Button attackBotton = default;
     public Button magicBotton = default;
@@ -39,12 +30,18 @@ public class GameManager : MonoBehaviour
 
     public float ATBspeed = 0.1f;
 
+    public GameObject instance = default;
+
+    [SerializeField] Text[] statusText;
+
+    Singleton singleton;
     void Start()
     {
         player = GameObject.Find("Player");
         enemy = GameObject.Find("Enemy");
 
-        playerScript = player.GetComponent<PlayerController>(); //PlayerBattleControllerの取得
+        playerScript = player.GetComponent<PlayerController>(); //PlayerControllerの取得
+        playerScript2 = player.GetComponent<PlayerBattleController>(); //PlayerControllerの取得
         enemyScript = enemy.GetComponent<EnemyController>();
         pointerScript = GetComponent<Pointer>();
 
@@ -66,20 +63,29 @@ public class GameManager : MonoBehaviour
 
         Debug.Log(enemyATB.value);
 
-        playerMaxHp = playerScript.maxHp; //プレイヤーの最大HPの取得
-        enemyMaxHp = enemyScript.enemyHp;
-
-        playerHp = playerScript.maxHp; //プレイヤーの現在HPの取得
-        enemyHp = enemyScript.enemyHp;
-
-        Debug.Log("プレイヤーHP" + playerHp);
-        Debug.Log("エネミーHP" + enemyHp);
-
         pointer = pointerScript.count;
+
+        statusText = new Text[4];
+        statusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
+        statusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
+        statusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
+        statusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
+
+        singleton = Singleton.Instance;
     }
 
     void Update()
     {
+        statusText[0].text = "HP:" + singleton.playerCurrentHp;
+        statusText[1].text = "MP:" + singleton.playerCurrentMp;
+        statusText[2].text = "ATK:" + singleton.playerAtk;
+        statusText[3].text = "DEF:" + singleton.playerDef;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene("Map");
+        }
+
         pointer = pointerScript.count;
 
         playerATB.value += ATBspeed * Time.deltaTime;
@@ -120,77 +126,51 @@ public class GameManager : MonoBehaviour
 
     public void Attack()
     {
-        playerAttackText.text = "こうげき：1ダメージを与えた";
-        enemyHp = enemyHp - 1;
-        Invoke("DeleteText", 1.0f);
-        Debug.Log("プレイヤー攻撃" + enemyHp);
-        enemySlider.value = (float)enemyHp / (float)enemyMaxHp;
-        if (enemyHp <= 0)
+        singleton.enemyCurrentHp = singleton.enemyCurrentHp - singleton.playerAtk;
+        Debug.Log("プレイヤー攻撃" + singleton.enemyCurrentHp);
+        enemySlider.value = (float)singleton.enemyCurrentHp / (float)singleton.enemyMaxHp;
+        if (singleton.enemyCurrentHp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
-            enemyScript.Destroy();
             Win();
+            SceneManager.LoadScene("Map");
         }
         playerATB.value = 0;
     }
 
     public void Magic()
     {
-        playerMagicText.text = "まほう：2ダメージを与えた";
-        enemyHp = enemyHp - 2;
-        Invoke("DeleteText", 1.0f);
-        Debug.Log("プレイヤーまほう" + enemyHp);
-        enemySlider.value = (float)enemyHp / (float)enemyMaxHp;
-        if (enemyHp <= 0)
+        singleton.enemyCurrentHp = singleton.enemyCurrentHp - 10;
+        Debug.Log("プレイヤーまほう" + singleton.enemyCurrentHp);
+        enemySlider.value = (float)singleton.enemyCurrentHp / (float)singleton.enemyMaxHp;
+        if (singleton.enemyCurrentHp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
-            enemyScript.Destroy();
             Win();
+            SceneManager.LoadScene("Map");
         }
         playerATB.value = 0;
     }
 
     public void Item()
     {
-        playerItemText.text = "アイテムを使用した";
-        playerHp = playerHp + 1;
-        Invoke("DeleteText", 1.0f);
-        Debug.Log("プレイヤーアイテム" + playerHp);
-        playerSlider.value = (float)playerHp / (float)playerMaxHp;
+        singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
+        Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
+        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         playerATB.value = 0;
     }
 
     public void EnemyAttack()
     {
-        enemyText.text = "てきのこうげき：1ダメージを与えた";
-        playerHp = playerHp - 1;
-        Debug.Log("敵攻撃" + playerHp);
-        Invoke("DeleteText", 1.0f);
-        playerSlider.value = (float)playerHp / (float)playerMaxHp;
-        if (playerHp <= 0)
-        {
-            playerSlider.gameObject.SetActive(false);
-            playerScript.Destroy();
-            GameOver();
-        }
+        singleton.playerCurrentHp = singleton.playerCurrentHp - 1;
+        Debug.Log("敵攻撃" + singleton.playerCurrentHp);
+        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         enemyATB.value = 0;
     }
 
-
-    void DeleteText()
-    {
-        playerAttackText.text = "";
-        playerMagicText.text = "";
-        playerItemText.text = "";
-        enemyText.text = "";
-    }
     void Win()
     {
+        singleton.deathFlag = true;
         Debug.Log("Win");
-    }
-
-    void GameOver()
-    {
-        Debug.Log("ゲームオーバー");
     }
 }

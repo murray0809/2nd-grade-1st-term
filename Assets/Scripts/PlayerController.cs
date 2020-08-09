@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Rigidbody を使ってプレイヤーを動かすコンポーネント
@@ -25,29 +27,40 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody m_rb;
 
-    public int maxHp = default; //プレイヤーの最大HP
-    public int currentHp = default;
-    public int maxMp = default; //プレイヤーの最大MP
-    public int atk = default; //プレイヤーのATK
-    public int def = default; //プレイヤーのDEF
+    [SerializeField] Text[] statusText;
+
+    public static Vector3 pos;
+
+    Singleton singleton;
 
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
 
-        maxHp = 10;
-        currentHp = maxHp;
-        maxMp = 5;
-        atk = 1;
-        def = 1;
+        statusText = new Text[4];
+        statusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
+        statusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
+        statusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
+        statusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
+
+        singleton = Singleton.Instance;
+        Debug.Log(singleton.playerCurrentHp);
+        singleton.playerPos = this.transform.position;
     }
 
     void Update()
     {
+        statusText[0].text = "HP:" + singleton.playerCurrentHp;
+        statusText[1].text = "MP:" + singleton.playerCurrentMp;
+        statusText[2].text = "ATK:" + singleton.playerAtk;
+        statusText[3].text = "DEF:" + singleton.playerDef;
+
         // 方向の入力を取得し、方向を求める
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
+
+        
 
         // ControlType と入力に応じてキャラクターを動かす
         if (m_controlType == ControlType.Turn)
@@ -127,7 +140,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (currentHp <= 0)
+        if (singleton.playerCurrentHp <= 0)
         {
             Destroy();
         }
@@ -151,6 +164,17 @@ public class PlayerController : MonoBehaviour
     public void Destroy()
     {
         Destroy(this.gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "FieldEnemy")
+        {
+            pos = this.transform.position;
+            Debug.Log(pos);
+            Debug.Log("接触");
+            SceneManager.LoadScene("Battle");
+        }
     }
 }
 

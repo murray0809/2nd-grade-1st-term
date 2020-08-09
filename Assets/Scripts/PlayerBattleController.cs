@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerBattleController : MonoBehaviour
 {
-    public int playerHp;
+    public int MaxHp;
     void Start()
     {
-        playerHp = 10;
+        MaxHp = 10;
     }
 
     void Update()
     {
-        if (playerHp <= 0)
+        if (MaxHp <= 0)
         {
             Destroy();
         }

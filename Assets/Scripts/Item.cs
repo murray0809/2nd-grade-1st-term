@@ -5,11 +5,13 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public GameObject player;
-    PlayerController playerScript;
+   
+    Singleton singleton;
     void Start()
     {
         player = GameObject.Find("Player");
-        playerScript = player.GetComponent<PlayerController>();
+
+        singleton = Singleton.Instance;
     }
 
     void Update()
@@ -21,7 +23,7 @@ public class Item : MonoBehaviour
     {
         if (collision.gameObject.name == "Player")
         {
-            playerScript.maxHp += 1;
+            singleton.playerMaxHp += 1;
             Destroy(this.gameObject);
         }
     }

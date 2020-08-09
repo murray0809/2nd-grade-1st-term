@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CameraController3 : MonoBehaviour
 {
-    GameObject targetObj;
+    public GameObject targetObj;
     Vector3 targetPos;
 
+    public static Vector3 pos;
     void Start()
     {
-        targetObj = GameObject.Find("FieldPlayer");
+        targetObj = GameObject.FindGameObjectWithTag("FieldPlayer");
         targetPos = targetObj.transform.position;
     }
 
@@ -28,6 +29,18 @@ public class CameraController3 : MonoBehaviour
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * Time.deltaTime * 200f);
             // カメラの垂直移動（※角度制限なし、必要が無ければコメントアウト）
             transform.RotateAround(targetPos, transform.right, mouseInputY * Time.deltaTime * 200f);
-        
+
+        //pos = this.transform.position;
+        //Debug.Log(pos);
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "FieldEnemy")
+        {
+            pos = this.transform.position;
+            Debug.Log(pos);
+        }
     }
 }

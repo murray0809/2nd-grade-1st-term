@@ -2,19 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
-    Button btn;
+    public GameObject obj;
+    //public GameObject cam;
+    Singleton singleton;
+    public GameObject ene; 
+    Vector3 enemyPos = new Vector3(-2f, 0f, 3f);
+
     void Start()
     {
-        btn = GameObject.Find("Button").GetComponent<Button>();
+        singleton = Singleton.Instance;
+        Instantiate(obj, PlayerController.pos, Quaternion.identity);
+        //Instantiate(cam, CameraController3.pos, Quaternion.identity);
+        if (!singleton.deathFlag)
+        {
+            Instantiate(ene, enemyPos, Quaternion.identity);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-       btn.enabled = false;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Destroy(singleton.enemy);
+            singleton.deathFlag = true;
+            SceneManager.LoadScene("Battle");
+        }
+
+       
     }
 }
