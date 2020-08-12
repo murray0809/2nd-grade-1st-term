@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
         singleton = Singleton.Instance;
         Debug.Log(singleton.playerCurrentHp);
-        singleton.playerPos = this.transform.position;
+        singleton.playerPos = this.transform.position; //プレイヤーのポジション
     }
 
     void Update()

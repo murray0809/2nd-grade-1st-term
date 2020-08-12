@@ -10,10 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject enemy;
 
-    PlayerController playerScript;
-    EnemyController enemyScript;
     Pointer pointerScript;
-    PlayerBattleController playerScript2;
 
     public int pointer;
 
@@ -32,17 +29,14 @@ public class GameManager : MonoBehaviour
 
     public GameObject instance = default;
 
-    [SerializeField] Text[] statusText;
+    [SerializeField] Text[] battleStatusText;
 
     Singleton singleton;
     void Start()
     {
-        player = GameObject.Find("Player");
-        enemy = GameObject.Find("Enemy");
+        player = GameObject.Find("BattlePlayer");
+        enemy = GameObject.Find("BattleEnemy");
 
-        playerScript = player.GetComponent<PlayerController>(); //PlayerControllerの取得
-        playerScript2 = player.GetComponent<PlayerBattleController>(); //PlayerControllerの取得
-        enemyScript = enemy.GetComponent<EnemyController>();
         pointerScript = GetComponent<Pointer>();
 
         attackBotton = GameObject.Find("Attack").GetComponent<Button>();
@@ -65,21 +59,21 @@ public class GameManager : MonoBehaviour
 
         pointer = pointerScript.count;
 
-        statusText = new Text[4];
-        statusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
-        statusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
-        statusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
-        statusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
+        battleStatusText = new Text[4];
+        battleStatusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
+        battleStatusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
+        battleStatusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
+        battleStatusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
 
         singleton = Singleton.Instance;
     }
 
     void Update()
     {
-        statusText[0].text = "HP:" + singleton.playerCurrentHp;
-        statusText[1].text = "MP:" + singleton.playerCurrentMp;
-        statusText[2].text = "ATK:" + singleton.playerAtk;
-        statusText[3].text = "DEF:" + singleton.playerDef;
+        battleStatusText[0].text = "HP:" + singleton.playerCurrentHp;
+        battleStatusText[1].text = "MP:" + singleton.playerCurrentMp;
+        battleStatusText[2].text = "ATK:" + singleton.playerAtk;
+        battleStatusText[3].text = "DEF:" + singleton.playerDef;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
