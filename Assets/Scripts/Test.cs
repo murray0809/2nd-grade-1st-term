@@ -11,28 +11,26 @@ public class Test : MonoBehaviour
     Singleton singleton;
     public GameObject ene; 
     Vector3 enemyPos = new Vector3(-2f, 0f, 3f);
+    Vector3 startPos;
 
-    void Start()
+    void Awake()
     {
         singleton = Singleton.Instance;
-        Instantiate(obj, PlayerController.pos, Quaternion.identity);
-        //Instantiate(cam, CameraController3.pos, Quaternion.identity);
-        if (!singleton.deathFlag)
+        if (singleton.start)
         {
-            Instantiate(ene, enemyPos, Quaternion.identity);
+            startPos = this.gameObject.transform.position;
+            Debug.Log(startPos);
+            Instantiate(obj, startPos, Quaternion.identity);
+            singleton.start = false;
+        }
+        else
+        {
+            Instantiate(obj, PlayerController.pos, Quaternion.identity);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Destroy(singleton.enemy);
-            singleton.deathFlag = true;
-            SceneManager.LoadScene("Battle");
-        }
-
        
     }
 }

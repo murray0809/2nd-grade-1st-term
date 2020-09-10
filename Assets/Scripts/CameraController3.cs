@@ -6,12 +6,14 @@ public class CameraController3 : MonoBehaviour
 {
     public GameObject targetObj;
     Vector3 targetPos;
+    Vector3 distance = new Vector3(0f, 1f, -3f);
 
     public static Vector3 pos;
     void Start()
     {
         targetObj = GameObject.FindGameObjectWithTag("FieldPlayer");
         targetPos = targetObj.transform.position;
+        this.gameObject.transform.position = targetPos + distance;
     }
 
     void Update()

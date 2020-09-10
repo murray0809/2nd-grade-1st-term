@@ -20,6 +20,8 @@ public class Singleton
 
     public bool deathFlag = false;
 
+    public bool start = true;
+
     public Vector3 playerPos;　//プレイヤーのポジション
     private Singleton()
     { // Private Constructor
