@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(singleton.playerLv);
+
         //statusText[0].text = "HP:" + singleton.playerCurrentHp;
         //statusText[1].text = "MP:" + singleton.playerCurrentMp;
         //statusText[2].text = "ATK:" + singleton.playerAtk;
@@ -61,8 +63,6 @@ public class PlayerController : MonoBehaviour
         // 方向の入力を取得し、方向を求める
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
-
-        
 
         // ControlType と入力に応じてキャラクターを動かす
         if (m_controlType == ControlType.Turn)
@@ -147,7 +147,6 @@ public class PlayerController : MonoBehaviour
             Destroy();
         }
     }
-
     /// <summary>
     /// 地面に接触しているか判定する
     /// </summary>

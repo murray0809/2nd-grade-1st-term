@@ -163,6 +163,12 @@ public class GameManager : MonoBehaviour
         {
             enemySlider.gameObject.SetActive(false);
             Win();
+            singleton.playerExp += 400;
+
+            if (singleton.playerExp % 400 == 0)
+            {
+                LvUp();
+            }
             SceneManager.LoadScene("Island");
         }
         playerATB.value = 0;
@@ -188,5 +194,11 @@ public class GameManager : MonoBehaviour
     {
         singleton.deathFlag = true;
         Debug.Log("Win");
+    }
+
+    void LvUp()
+    {
+        singleton.playerLv++;
+        Debug.Log("LvUp" + singleton.playerLv);
     }
 }

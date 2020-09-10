@@ -16,6 +16,9 @@ public class Singleton
     public int enemyMaxHp = 10; //エネミーの最大HP
     public int enemyCurrentHp = 10; //エネミーの現在HP
 
+    public int playerExp = 0;
+    public int playerLv = 1;
+
     public GameObject enemy;
 
     public bool deathFlag = false;

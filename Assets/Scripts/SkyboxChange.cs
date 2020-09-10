@@ -36,8 +36,6 @@ public class SkyboxChange : MonoBehaviour
     {
         singleton.time += Time.deltaTime;
 
-        Debug.Log(singleton.timeCount);
-
         if (singleton.timeCount == 1)
         {
             if (singleton.time >= 0 && singleton.time < 3)
