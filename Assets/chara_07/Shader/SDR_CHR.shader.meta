@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: de801a075b1fc884580e0284940ef282
+timeCreated: 1507597733
+licenseType: Pro
+ShaderImporter:
+  defaultTextures:
+  - _matMetal: {instanceID: 0}
+  - _matToon: {instanceID: 0}
+  - _maskTex: {instanceID: 0}
+  - _diffuse: {instanceID: 0}
+  - _eyesTex: {instanceID: 0}
+  - _mouthTex: {instanceID: 0}
+  - _MatrixTex: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
