@@ -23,6 +23,9 @@ public class Singleton
     public bool start = true;
 
     public Vector3 playerPos;　//プレイヤーのポジション
+
+    public int timeCount = 1;
+    public float time = 0;
     private Singleton()
     { // Private Constructor
 

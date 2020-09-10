@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text[] battleStatusText;
 
     Singleton singleton;
+
+    public Material skybox1;
+    public Material skybox2;
+    public Material skybox3;
+    public Material skybox4;
+    public Material skybox5;
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -75,11 +81,6 @@ public class GameManager : MonoBehaviour
         battleStatusText[2].text = "ATK:" + singleton.playerAtk;
         battleStatusText[3].text = "DEF:" + singleton.playerDef;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneManager.LoadScene("Map");
-        }
-
         pointer = pointerScript.count;
 
         playerATB.value += ATBspeed * Time.deltaTime;
@@ -116,6 +117,27 @@ public class GameManager : MonoBehaviour
             enemyATB.value = 1;
             EnemyAttack();
         }
+
+        if (singleton.timeCount == 1)
+        {
+            RenderSettings.skybox = skybox1;
+        }
+        if (singleton.timeCount == 2)
+        {
+            RenderSettings.skybox = skybox2;
+        }
+        if (singleton.timeCount == 3)
+        {
+            RenderSettings.skybox = skybox3;
+        }
+        if (singleton.timeCount == 4)
+        {
+            RenderSettings.skybox = skybox4;
+        }
+        if (singleton.timeCount == 5)
+        {
+            RenderSettings.skybox = skybox5;
+        }
     }
 
     public void Attack()
@@ -127,7 +149,7 @@ public class GameManager : MonoBehaviour
         {
             enemySlider.gameObject.SetActive(false);
             Win();
-            SceneManager.LoadScene("Map");
+            SceneManager.LoadScene("Island");
         }
         playerATB.value = 0;
     }
@@ -141,7 +163,7 @@ public class GameManager : MonoBehaviour
         {
             enemySlider.gameObject.SetActive(false);
             Win();
-            SceneManager.LoadScene("Map");
+            SceneManager.LoadScene("Island");
         }
         playerATB.value = 0;
     }

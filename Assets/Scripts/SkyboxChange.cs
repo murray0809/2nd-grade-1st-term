@@ -12,125 +12,170 @@ public class SkyboxChange : MonoBehaviour
     public Material skybox4;
     public Material skybox5;
 
-    public float time;
+    //public float singletontime;
 
     public float skytime;
     public float skyspeed;
 
     public Light sun = default;
-    //float intensity = default;
 
     bool reset = false;
+
+    Singleton singleton;
     void Start()
     {
-        time = 0f;
+        singleton = Singleton.Instance;
+
         reset = true;
         RenderSettings.skybox = skybox1;
 
         sun = GameObject.Find("Directional Light").GetComponent<Light>();
         sun.intensity = 0f;
-
-        //intensity = sun.GetComponent<Light>().intensity;
-        //GetComponent<Renderer>().material.SetFloat("_Blend", 0.5f);
     }
     void Update()
     {
-        time += Time.deltaTime;
+        singleton.time += Time.deltaTime;
 
-        if (time >= 0 && time < 3)
+        Debug.Log(singleton.timeCount);
+
+        if (singleton.timeCount == 1)
         {
-            sun.intensity += 0.3f * Time.deltaTime;
-            if (reset)
+            if (singleton.time >= 0 && singleton.time < 3)
             {
-                SkytimeReset();
-                reset = false;
+                sun.intensity += 0.3f * Time.deltaTime;
+                if (reset)
+                {
+                    SkytimeReset();
+                    reset = false;
+                }
+                RenderSettings.skybox = skybox1;// Skyboxの変更
+                skytime += skyspeed * Time.deltaTime;
+                if (skytime >= 1)
+                {
+                    skytime = 1f;
+                }
+                if (sun.intensity >= 0.7)
+                {
+                    sun.intensity = 0.7f;
+                }
             }
-            RenderSettings.skybox = skybox1;// Skyboxの変更
-            skytime += skyspeed * Time.deltaTime;
-            if (skytime >= 1)
+            if (singleton.time >= 3)
             {
-                skytime = 1f;
-            }
-            if (sun.intensity >= 0.7)
-            {
-                sun.intensity = 0.7f;
+                singleton.timeCount = 2;
             }
         }
-        if (time >= 3 && time < 6 )
+
+        if (singleton.timeCount == 2)
         {
-            sun.intensity += 0.3f * Time.deltaTime;
-            if (!reset)
+            if (singleton.time >= 3 && singleton.time < 6)
             {
-                SkytimeReset();
-                reset = true;
+                sun.intensity += 0.3f * Time.deltaTime;
+                if (!reset)
+                {
+                    SkytimeReset();
+                    reset = true;
+                }
+                RenderSettings.skybox = skybox2;
+                
+                skytime += skyspeed * Time.deltaTime;
+                if (skytime >= 1)
+                {
+                    skytime = 1f;
+                }
+                if (sun.intensity >= 1)
+                {
+                    sun.intensity = 1f;
+                }
             }
-            RenderSettings.skybox = skybox2;
-            skytime += skyspeed * Time.deltaTime;
-            if (skytime >= 1)
+            if (singleton.time >= 6)
             {
-                skytime = 1f;
-            }
-            if (sun.intensity >= 1)
-            {
-                sun.intensity = 1f;
+                singleton.timeCount = 3;
             }
         }
-        if (time >= 6 && time < 9)
+
+        if (singleton.timeCount == 3)
         {
-            sun.intensity -= 0.3f * Time.deltaTime;
-            if (reset)
+            if (singleton.time >= 6 && singleton.time < 9)
             {
-                SkytimeReset();
-                reset = false;
+                sun.intensity -= 0.3f * Time.deltaTime;
+                if (reset)
+                {
+                    SkytimeReset();
+                    reset = false;
+                }
+                RenderSettings.skybox = skybox3;
+             
+                skytime += skyspeed * Time.deltaTime;
+                if (skytime >= 1)
+                {
+                    skytime = 1f;
+                }
+                if (sun.intensity <= 0.5)
+                {
+                    sun.intensity = 0.5f;
+                }
             }
-            RenderSettings.skybox = skybox3;
-            skytime += skyspeed * Time.deltaTime;
-            if (skytime >= 1)
+            if (singleton.time >= 9)
             {
-                skytime = 1f;
-            }
-            if (sun.intensity <= 0.5)
-            {
-                sun.intensity = 0.5f;
+                singleton.timeCount = 4;
             }
         }
-        if (time >= 9 && time < 12)
+
+        if (singleton.timeCount == 4)
         {
-            sun.intensity -= 0.3f * Time.deltaTime;
-            if (!reset)
+            if (singleton.time >= 9 && singleton.time < 12)
             {
-                SkytimeReset();
-                reset = true;
+                sun.intensity -= 0.3f * Time.deltaTime;
+                if (!reset)
+                {
+                    SkytimeReset();
+                    reset = true;
+                }
+                RenderSettings.skybox = skybox4;
+
+                skytime += skyspeed * Time.deltaTime;
+                if (skytime >= 1)
+                {
+                    skytime = 1f;
+                }
+                if (sun.intensity <= 0.3)
+                {
+                    sun.intensity = 0.3f;
+                }
             }
-            RenderSettings.skybox = skybox4;
-            skytime += skyspeed * Time.deltaTime;
-            if (skytime >= 1)
+            if (singleton.time >= 12)
             {
-                skytime = 1f;
-            }
-            if (sun.intensity <= 0.3)
-            {
-                sun.intensity = 0.3f;
+                singleton.timeCount = 5;
             }
         }
-        if (time >= 12 && time < 15)
+
+        if (singleton.timeCount == 5)
         {
-            sun.intensity -= 0.3f * Time.deltaTime;
-            if (reset)
+            if (singleton.time >= 12 && singleton.time < 15)
             {
-                SkytimeReset();
-                reset = false;
+                sun.intensity -= 0.3f * Time.deltaTime;
+                if (reset)
+                {
+                    SkytimeReset();
+                    reset = false;
+                }
+                RenderSettings.skybox = skybox5;
+
+                skytime += skyspeed * Time.deltaTime;
+                if (skytime >= 1)
+                {
+                    skytime = 1f;
+                }
             }
-            RenderSettings.skybox = skybox5;
-            skytime += skyspeed * Time.deltaTime;
-            if (skytime >= 1)
+            if (singleton.time >= 15)
             {
-                skytime = 1f;
+                singleton.timeCount = 1;
             }
         }
-        if (time >= 15f)
+       
+        if (singleton.time >= 15f)
         {
-            time = 0f;
+            singleton.time = 0f;
             reset = true;
         }
         if (sun.intensity <= 0)

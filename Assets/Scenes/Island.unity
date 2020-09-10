@@ -335,6 +335,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1366013794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1366013796}
+  - component: {fileID: 1366013795}
+  m_Layer: 0
+  m_Name: Sky
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1366013795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366013794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1d8ddf88da6964f8a27d1ceffe12d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skybox1: {fileID: 2100000, guid: 96c5d9df497c3dd4fa27b2e047229adc, type: 2}
+  skybox2: {fileID: 2100000, guid: 0ae8210b17766f74fb2ca2814556b850, type: 2}
+  skybox3: {fileID: 2100000, guid: 831de7ef9eca3dd4b97c0c3aad28fee8, type: 2}
+  skybox4: {fileID: 2100000, guid: 36ed5bf533f109b44b05e51699d559e0, type: 2}
+  skybox5: {fileID: 2100000, guid: 9b66336f4af222c4e8aff742d90fa2ae, type: 2}
+  time: 0
+  skytime: 0
+  skyspeed: 0.5
+  sun: {fileID: 984039097}
+--- !u!4 &1366013796
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366013794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 123.558815, y: 41.812584, z: 212.41978}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1718600492
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,9 +421,9 @@ MonoBehaviour:
   minX: 100
   maxX: 150
   minY: 30
-  maxY: 50
-  minZ: 200
-  maxZ: 250
+  maxY: 35
+  minZ: 100
+  maxZ: 150
 --- !u!4 &1718600494
 Transform:
   m_ObjectHideFlags: 0
