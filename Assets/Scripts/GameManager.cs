@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     public Material skybox3;
     public Material skybox4;
     public Material skybox5;
+
+    public bool isAttaking = false;
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -184,6 +186,7 @@ public class GameManager : MonoBehaviour
 
     public void EnemyAttack()
     {
+        isAttaking = true;
         singleton.playerCurrentHp = singleton.playerCurrentHp - 1;
         Debug.Log("敵攻撃" + singleton.playerCurrentHp);
         playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;

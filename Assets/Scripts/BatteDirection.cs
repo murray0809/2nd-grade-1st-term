@@ -13,8 +13,8 @@ public class BatteDirection : MonoBehaviour
     [SerializeField] Vector3 enemypos = default; //エネミーのポジション
     void Start()
     {
-        player = GameObject.Find("BattlePlayer");
-        enemy = GameObject.Find("BattleEnemy");
+        player = GameObject.FindGameObjectWithTag("Player");
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
 
         playerpos = player.transform.position;　//プレイヤーのポジションの代入
         enemypos = enemy.transform.position;　//プレイヤーのポジションの代入

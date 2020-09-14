@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 7417208131594672495}
   - component: {fileID: 7472561918702050013}
   - component: {fileID: 7422106966208828873}
+  - component: {fileID: 9162071234711135185}
   m_Layer: 0
   m_Name: BattleEnemy
   m_TagString: Untagged
@@ -381,7 +382,7 @@ Animator:
   m_GameObject: {fileID: 7414104330690730477}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 29101370726a99a4da2f373657660c62, type: 3}
-  m_Controller: {fileID: 9100000, guid: 5f3e46f0bf8c33b4780c907d312a0691, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9c6222127194635408f43c74747e846b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -403,6 +404,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &9162071234711135185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7414104330690730477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c43525c298e4047ac0f63c85bc5eef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 7472561918702050013}
 --- !u!1 &7414107106224684649
 GameObject:
   m_ObjectHideFlags: 0
