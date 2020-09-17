@@ -13,8 +13,8 @@ public class Singleton
     public int playerAtk = 5; //プレイヤーの攻撃力
     public int playerDef = 5; //プレイヤーの防御力
 
-    public int enemyMaxHp = 10; //エネミーの最大HP
-    public int enemyCurrentHp = 10; //エネミーの現在HP
+    public int enemy1MaxHp = 10; //エネミー1の最大HP
+    public int enemy1Hp = 10; //エネミー1の現在HP
 
     public int playerExp = 0;
     public int playerLv = 1;
@@ -29,6 +29,10 @@ public class Singleton
 
     public int timeCount = 1;
     public float time = 0;
+
+    public bool attack = false;
+    public bool magic = false;
+    public bool item = false;
     private Singleton()
     { // Private Constructor
 

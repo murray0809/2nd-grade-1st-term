@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(singleton.playerLv);
 
         //statusText[0].text = "HP:" + singleton.playerCurrentHp;
         //statusText[1].text = "MP:" + singleton.playerCurrentMp;

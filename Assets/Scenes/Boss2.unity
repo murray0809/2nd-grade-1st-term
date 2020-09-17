@@ -396,7 +396,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519357244}
+      - m_Target: {fileID: 0}
         m_MethodName: Magic
         m_Mode: 1
         m_Arguments:
@@ -810,8 +810,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 519357245}
-  - component: {fileID: 519357244}
   - component: {fileID: 519357246}
+  - component: {fileID: 519357244}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -828,27 +828,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 519357243}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f3ae1eae9f47f147af9fd5df4820be0, type: 3}
+  m_Script: {fileID: 11500000, guid: 13172634a1b9db448ab927da721f7477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   enemy: {fileID: 0}
   pointer: 0
-  attackBotton: {fileID: 1270462751}
-  magicBotton: {fileID: 173275430}
-  itemBotton: {fileID: 1665052936}
+  anim: {fileID: 0}
+  maxHp: 10
+  hp: 10
+  attackBotton: {fileID: 0}
+  magicBotton: {fileID: 0}
+  itemBotton: {fileID: 0}
   playerSlider: {fileID: 0}
-  enemySlider: {fileID: 945853202}
+  enemySlider: {fileID: 0}
   playerATB: {fileID: 0}
   enemyATB: {fileID: 0}
   ATBspeed: 0.1
   instance: {fileID: 0}
-  battleStatusText: []
-  skybox1: {fileID: 2100000, guid: 96c5d9df497c3dd4fa27b2e047229adc, type: 2}
-  skybox2: {fileID: 2100000, guid: 0ae8210b17766f74fb2ca2814556b850, type: 2}
-  skybox3: {fileID: 2100000, guid: 831de7ef9eca3dd4b97c0c3aad28fee8, type: 2}
-  skybox4: {fileID: 2100000, guid: 36ed5bf533f109b44b05e51699d559e0, type: 2}
-  skybox5: {fileID: 2100000, guid: 9b66336f4af222c4e8aff742d90fa2ae, type: 2}
+  skybox1: {fileID: 0}
+  skybox2: {fileID: 0}
+  skybox3: {fileID: 0}
+  skybox4: {fileID: 0}
+  skybox5: {fileID: 0}
   isAttaking: 0
 --- !u!4 &519357245
 Transform:
@@ -978,6 +980,19 @@ MonoBehaviour:
   enemy: {fileID: 0}
   playerpos: {x: 0, y: 0, z: 0}
   enemypos: {x: 0, y: 0, z: 0}
+--- !u!114 &617044034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617044029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abcc8eb2c9f044449b1fb710d209248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
 --- !u!1 &693040559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,7 +1886,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519357244}
+      - m_Target: {fileID: 0}
         m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
@@ -2100,6 +2115,20 @@ MonoBehaviour:
   enemy: {fileID: 0}
   playerpos: {x: 0, y: 0, z: 0}
   enemypos: {x: 0, y: 0, z: 0}
+--- !u!114 &1540220966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540220961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01036f357bfe4ba4095b21127d64dfcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ATBspeed: 0.1
+  anim: {fileID: 0}
 --- !u!1 &1554929083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2487,6 +2516,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95878504473261044, guid: a185de8d4c630c14fa055600c1393020,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: cd46b0e44fc30f048a42f2b379402f70, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a185de8d4c630c14fa055600c1393020, type: 3}
 --- !u!1 &1630735184
@@ -2806,7 +2840,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519357244}
+      - m_Target: {fileID: 0}
         m_MethodName: Item
         m_Mode: 1
         m_Arguments:
@@ -3414,6 +3448,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6537089444834785313, guid: 62e677b304fcf4b47987aa3430b8fc54,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ee86716c96428294391a6b694d5d1646, type: 2}
     - target: {fileID: 6624285490286286033, guid: 62e677b304fcf4b47987aa3430b8fc54,
         type: 3}
       propertyPath: m_Name

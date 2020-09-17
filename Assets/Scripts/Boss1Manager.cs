@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 
-public class GameManager : MonoBehaviour
+public class Boss1Manager : MonoBehaviour
 {
     public GameObject player;
     public GameObject enemy;
@@ -13,6 +12,9 @@ public class GameManager : MonoBehaviour
     Pointer pointerScript;
 
     public int pointer;
+
+    [SerializeField] int maxHp;
+    [SerializeField] int hp;
 
     public Button attackBotton = default;
     public Button magicBotton = default;
@@ -29,8 +31,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject instance = default;
 
-    [SerializeField] Text[] battleStatusText;
-
     Singleton singleton;
 
     public Material skybox1;
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
-        enemy = GameObject.Find("BattleEnemy");
+        enemy = GameObject.Find("BattleBoss");
 
         pointerScript = GetComponent<Pointer>();
 
@@ -59,30 +59,15 @@ public class GameManager : MonoBehaviour
 
         playerATB.value = Random.value;
 
-        Debug.Log(playerATB.value);
-
         enemyATB.value = Random.value;
 
-        Debug.Log(enemyATB.value);
-
         pointer = pointerScript.count;
-
-        battleStatusText = new Text[4];
-        battleStatusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
-        battleStatusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
-        battleStatusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
-        battleStatusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
 
         singleton = Singleton.Instance;
     }
 
     void Update()
     {
-        battleStatusText[0].text = "HP:" + singleton.playerCurrentHp;
-        battleStatusText[1].text = "MP:" + singleton.playerCurrentMp;
-        battleStatusText[2].text = "ATK:" + singleton.playerAtk;
-        battleStatusText[3].text = "DEF:" + singleton.playerDef;
-
         pointer = pointerScript.count;
 
         playerATB.value += ATBspeed * Time.deltaTime;
@@ -114,12 +99,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //if (enemyATB.value >= 1)
-        //{
-        //    enemyATB.value = 1;
-        //    EnemyAttack();
-        //}
-
         if (singleton.timeCount == 1)
         {
             RenderSettings.skybox = skybox1;
@@ -144,9 +123,9 @@ public class GameManager : MonoBehaviour
 
     public void Attack()
     {
-        singleton.enemy1Hp = singleton.enemy1Hp - singleton.playerAtk;
-        Debug.Log("プレイヤー攻撃" + singleton.enemy1Hp);
-        enemySlider.value = (float)singleton.enemy1Hp / (float)singleton.enemy1MaxHp;
+        hp = hp - singleton.playerAtk;
+        Debug.Log("プレイヤー攻撃" + hp);
+        enemySlider.value = (float)hp / (float)maxHp;
         if (singleton.enemy1Hp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
@@ -158,10 +137,10 @@ public class GameManager : MonoBehaviour
 
     public void Magic()
     {
-        singleton.enemy1Hp = singleton.enemy1Hp - 10;
-        Debug.Log("プレイヤーまほう" + singleton.enemy1Hp);
-        enemySlider.value = (float)singleton.enemy1Hp / (float)singleton.enemy1MaxHp;
-        if (singleton.enemy1Hp <= 0)
+        hp = hp - 10;
+        Debug.Log("プレイヤーまほう" + hp);
+        enemySlider.value = (float)hp / (float)maxHp;
+        if (hp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
             Win();
@@ -182,15 +161,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
         playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         playerATB.value = 0;
-    }
-
-    public void EnemyAttack()
-    {
-        //isAttaking = true;
-        //singleton.playerCurrentHp = singleton.playerCurrentHp - 1;
-        //Debug.Log("敵攻撃" + singleton.playerCurrentHp);
-        //playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
-        //enemyATB.value = 0;
     }
 
     void Win()
