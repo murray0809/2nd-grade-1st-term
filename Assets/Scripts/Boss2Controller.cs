@@ -8,14 +8,38 @@ public class Boss2Controller : MonoBehaviour
 
     int attackComand;
 
+    [SerializeField] int atk;
+    [SerializeField] int mp;
+    [SerializeField] int hpUp;
+
+    Vector3 startPos = new Vector3(-2f, 0f, -6.5f);
+    Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
+    Vector3 playerPos = new Vector3(1f, 0f, -8f);
+
     bool attack = false;
     bool magic = false;
     bool heal = false;
+    float attackCount = 0;
+    float magicCount = 0;
+    float healCount = 0;
+
+    bool magicFlag = false;
 
     [SerializeField] Animator anim;
     GameObject gameManager;
 
     Boss2Manager manager;
+
+    public GameObject attackEffect;
+    public GameObject magicEffect;
+    public GameObject healEffect;
+
+    bool attackEffectFlag = false;
+    public float attackEffectCount = 0;
+    bool magicEffectFlag = false;
+    public float magicEffectCount = 0;
+
+    bool atb = true;
 
     Singleton singleton;
     
@@ -30,7 +54,15 @@ public class Boss2Controller : MonoBehaviour
 
     void Update()
     {
-        manager.enemyATB.value += ATBspeed * Time.deltaTime;
+        if (atb)
+        {
+            manager.enemyATB.value += ATBspeed * Time.deltaTime;
+        }
+        else
+        {
+            manager.enemyATB.value = 0;
+        }
+       
 
         if (manager.enemyATB.value >= 1)
         {
@@ -56,28 +88,83 @@ public class Boss2Controller : MonoBehaviour
 
         if (attack)
         {
+            atb = false;
             anim.SetBool("Attack1", true);
-            attack = false;
+            attackCount += 0.1f;
+            
+            Debug.Log(attackCount);
+            
+            if (attackCount > 15f)
+            {
+                attack = false;
+                atb = true;
+                attackCount = 0;
+            }
         }
         else
         {
             anim.SetBool("Attack1", false);
         }
 
+
+        if (attackEffectFlag)
+        {
+            magicEffectCount += 0.1f;
+            if (magicEffectCount > 3f)
+            {
+                AttackEffect();
+                attackEffectFlag = false;
+                magicEffectCount = 0;
+            }
+        }
+
         if (magic)
         {
+            magicFlag = true;
+            atb = false;
             anim.SetBool("Magic", true);
-            magic = false;
+            magicCount += 0.1f;
+            if (magicCount > 30f && magicFlag)
+            {
+                
+                magicFlag = false;
+            }
+
+            if (magicCount > 50f)
+            {
+                magic = false;
+                atb = true;
+                magicCount = 0;
+            }
         }
         else
         {
             anim.SetBool("Magic", false);
         }
 
+        if (magicEffectFlag)
+        {
+            magicEffectCount += 0.1f;
+            if (magicEffectCount > 20f)
+            {
+                MagicEffect();
+                magicEffectFlag = false;
+                magicEffectCount = 0;
+            }
+        }
+
         if (heal)
         {
+            atb = false;
             anim.SetBool("Heal", true);
-            heal = false;
+            healCount += 0.1f;
+            if (healCount > 20f)
+            {
+                HealEffect();
+                heal = false;
+                atb = true;
+                healCount = 0;
+            }
         }
         else
         {
@@ -88,7 +175,8 @@ public class Boss2Controller : MonoBehaviour
     void Attack()
     {
         attack = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - 1;
+        attackEffectFlag = true;
+        singleton.playerCurrentHp = singleton.playerCurrentHp - atk;
         manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         manager.enemyATB.value = 0;
     }
@@ -96,7 +184,8 @@ public class Boss2Controller : MonoBehaviour
     void Magic()
     {
         magic = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - 3;
+        magicEffectFlag = true;
+        singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
         manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         manager.enemyATB.value = 0;
     }
@@ -104,8 +193,22 @@ public class Boss2Controller : MonoBehaviour
     void Heal()
     {
         heal = true;
-        singleton.enemy1Hp = singleton.enemy1Hp + 3;
-        manager.enemySlider.value = (float)singleton.enemy1Hp / (float)singleton.enemy1MaxHp;
+        manager.hp = manager.hp + hpUp;
+        manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
         manager.enemyATB.value = 0;
+    }
+
+    void AttackEffect()
+    {
+        Instantiate(attackEffect, playerPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+    void MagicEffect()
+    {
+        Instantiate(magicEffect, playerPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+
+    void HealEffect()
+    {
+        Instantiate(healEffect, startPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
     }
 }

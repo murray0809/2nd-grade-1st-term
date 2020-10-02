@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Assertions.Must;
 
 public class Boss1Manager : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class Boss1Manager : MonoBehaviour
 
     public int pointer;
 
-    [SerializeField] int maxHp;
-    [SerializeField] int hp;
+    [SerializeField] public int maxHp;
+    [SerializeField] public int hp;
 
     public Button attackBotton = default;
     public Button magicBotton = default;
@@ -40,6 +41,12 @@ public class Boss1Manager : MonoBehaviour
     public Material skybox5;
 
     public bool isAttaking = false;
+
+    public bool playerAttack = false;
+    public bool playerMagic = false;
+    public bool playerHeal = false;
+
+    float count;
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -119,14 +126,46 @@ public class Boss1Manager : MonoBehaviour
         {
             RenderSettings.skybox = skybox5;
         }
+
+        if (playerAttack)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerAttack = false;
+            }
+        }
+        else if (playerMagic)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerMagic = false;
+            }
+        }
+        else if (playerHeal)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerHeal = false;
+            }
+        }
     }
 
     public void Attack()
     {
+        playerAttack = true;
         hp = hp - singleton.playerAtk;
         Debug.Log("プレイヤー攻撃" + hp);
         enemySlider.value = (float)hp / (float)maxHp;
-        if (singleton.enemy1Hp <= 0)
+        if (hp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
             Win();
@@ -137,6 +176,7 @@ public class Boss1Manager : MonoBehaviour
 
     public void Magic()
     {
+        playerMagic = true;
         hp = hp - 10;
         Debug.Log("プレイヤーまほう" + hp);
         enemySlider.value = (float)hp / (float)maxHp;
@@ -157,6 +197,7 @@ public class Boss1Manager : MonoBehaviour
 
     public void Item()
     {
+        playerHeal = true;
         singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
         Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
         playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;

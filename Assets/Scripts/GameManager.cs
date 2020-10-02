@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject enemy;
 
+    [SerializeField] public int maxHp;
+    [SerializeField] public int hp;
+
     Pointer pointerScript;
 
     public int pointer;
@@ -40,6 +43,19 @@ public class GameManager : MonoBehaviour
     public Material skybox5;
 
     public bool isAttaking = false;
+
+    public bool playerAttack = false;
+    public bool playerMagic = false;
+    public bool playerHeal = false;
+    float count;
+
+    public GameObject attackEffect;
+    public GameObject magicEffect;
+    public GameObject healEffect;
+
+    Vector3 enemyPos = new Vector3(-2f, 0f, -6.5f);
+    Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
+    Vector3 playerPos = new Vector3(1f, 0f, -8f);
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -87,9 +103,6 @@ public class GameManager : MonoBehaviour
 
         playerATB.value += ATBspeed * Time.deltaTime;
 
-        enemyATB.value += ATBspeed * Time.deltaTime;
-
-
         attackBotton.enabled = false;
         magicBotton.enabled = false;
         itemBotton.enabled = false;
@@ -114,12 +127,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //if (enemyATB.value >= 1)
-        //{
-        //    enemyATB.value = 1;
-        //    EnemyAttack();
-        //}
-
         if (singleton.timeCount == 1)
         {
             RenderSettings.skybox = skybox1;
@@ -140,14 +147,47 @@ public class GameManager : MonoBehaviour
         {
             RenderSettings.skybox = skybox5;
         }
+
+        if (playerAttack)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerAttack = false;
+            }
+        }
+        else if (playerMagic)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerMagic = false;
+            }
+        }
+        else if (playerHeal)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerHeal = false;
+            }
+        }
     }
 
     public void Attack()
     {
-        singleton.enemy1Hp = singleton.enemy1Hp - singleton.playerAtk;
-        Debug.Log("プレイヤー攻撃" + singleton.enemy1Hp);
-        enemySlider.value = (float)singleton.enemy1Hp / (float)singleton.enemy1MaxHp;
-        if (singleton.enemy1Hp <= 0)
+        
+        playerAttack = true;
+        hp = hp - singleton.playerAtk;
+        Debug.Log("プレイヤー攻撃" + hp);
+        enemySlider.value = (float)hp / (float)maxHp;
+        if (hp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
             Win();
@@ -158,10 +198,11 @@ public class GameManager : MonoBehaviour
 
     public void Magic()
     {
-        singleton.enemy1Hp = singleton.enemy1Hp - 10;
-        Debug.Log("プレイヤーまほう" + singleton.enemy1Hp);
-        enemySlider.value = (float)singleton.enemy1Hp / (float)singleton.enemy1MaxHp;
-        if (singleton.enemy1Hp <= 0)
+        playerMagic = true;
+        hp = hp - 10;
+        Debug.Log("プレイヤーまほう" + hp);
+        enemySlider.value = (float)hp / (float)maxHp;
+        if (hp <= 0)
         {
             enemySlider.gameObject.SetActive(false);
             Win();
@@ -178,19 +219,11 @@ public class GameManager : MonoBehaviour
 
     public void Item()
     {
+        playerHeal = true;
         singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
         Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
         playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         playerATB.value = 0;
-    }
-
-    public void EnemyAttack()
-    {
-        //isAttaking = true;
-        //singleton.playerCurrentHp = singleton.playerCurrentHp - 1;
-        //Debug.Log("敵攻撃" + singleton.playerCurrentHp);
-        //playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
-        //enemyATB.value = 0;
     }
 
     void Win()
@@ -203,5 +236,19 @@ public class GameManager : MonoBehaviour
     {
         singleton.playerLv++;
         Debug.Log("LvUp" + singleton.playerLv);
+    }
+
+    void AttackEffect()
+    {
+        Instantiate(attackEffect, enemyPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+    void MagicEffect()
+    {
+        Instantiate(magicEffect, enemyPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+
+    void HealEffect()
+    {
+        Instantiate(healEffect, playerPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
     }
 }

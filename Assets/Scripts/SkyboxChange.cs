@@ -38,7 +38,7 @@ public class SkyboxChange : MonoBehaviour
 
         if (singleton.timeCount == 1)
         {
-            if (singleton.time >= 0 && singleton.time < 3)
+            if (singleton.time >= 0 && singleton.time < 10)
             {
                 sun.intensity += 0.3f * Time.deltaTime;
                 if (reset)
@@ -57,7 +57,7 @@ public class SkyboxChange : MonoBehaviour
                     sun.intensity = 0.7f;
                 }
             }
-            if (singleton.time >= 3)
+            if (singleton.time >= 10)
             {
                 singleton.timeCount = 2;
             }
@@ -65,7 +65,7 @@ public class SkyboxChange : MonoBehaviour
 
         if (singleton.timeCount == 2)
         {
-            if (singleton.time >= 3 && singleton.time < 6)
+            if (singleton.time >= 10 && singleton.time < 20)
             {
                 sun.intensity += 0.3f * Time.deltaTime;
                 if (!reset)
@@ -85,7 +85,7 @@ public class SkyboxChange : MonoBehaviour
                     sun.intensity = 1f;
                 }
             }
-            if (singleton.time >= 6)
+            if (singleton.time >= 20)
             {
                 singleton.timeCount = 3;
             }
@@ -93,7 +93,7 @@ public class SkyboxChange : MonoBehaviour
 
         if (singleton.timeCount == 3)
         {
-            if (singleton.time >= 6 && singleton.time < 9)
+            if (singleton.time >= 20 && singleton.time < 30)
             {
                 sun.intensity -= 0.3f * Time.deltaTime;
                 if (reset)
@@ -113,7 +113,7 @@ public class SkyboxChange : MonoBehaviour
                     sun.intensity = 0.5f;
                 }
             }
-            if (singleton.time >= 9)
+            if (singleton.time >= 30)
             {
                 singleton.timeCount = 4;
             }
@@ -121,7 +121,7 @@ public class SkyboxChange : MonoBehaviour
 
         if (singleton.timeCount == 4)
         {
-            if (singleton.time >= 9 && singleton.time < 12)
+            if (singleton.time >= 30 && singleton.time < 40)
             {
                 sun.intensity -= 0.3f * Time.deltaTime;
                 if (!reset)
@@ -141,7 +141,7 @@ public class SkyboxChange : MonoBehaviour
                     sun.intensity = 0.3f;
                 }
             }
-            if (singleton.time >= 12)
+            if (singleton.time >= 40)
             {
                 singleton.timeCount = 5;
             }
@@ -149,7 +149,7 @@ public class SkyboxChange : MonoBehaviour
 
         if (singleton.timeCount == 5)
         {
-            if (singleton.time >= 12 && singleton.time < 15)
+            if (singleton.time >= 40 && singleton.time < 50)
             {
                 sun.intensity -= 0.3f * Time.deltaTime;
                 if (reset)
@@ -165,13 +165,13 @@ public class SkyboxChange : MonoBehaviour
                     skytime = 1f;
                 }
             }
-            if (singleton.time >= 15)
+            if (singleton.time >= 50)
             {
                 singleton.timeCount = 1;
             }
         }
        
-        if (singleton.time >= 15f)
+        if (singleton.time >= 50f)
         {
             singleton.time = 0f;
             reset = true;

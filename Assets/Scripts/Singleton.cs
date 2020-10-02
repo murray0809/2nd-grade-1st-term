@@ -6,8 +6,8 @@ public class Singleton
 {
     private static Singleton mInstance;
 
-    public int playerMaxHp = 10; //プレイヤーの最大HP
-    public int playerCurrentHp = 10; //プレイヤーの現在HP
+    public int playerMaxHp = 100; //プレイヤーの最大HP
+    public int playerCurrentHp = 100; //プレイヤーの現在HP
     public int playerMaxMp = 10; //プレイヤーの最大MP
     public int playerCurrentMp = 10; //プレイヤーの現在MP
     public int playerAtk = 5; //プレイヤーの攻撃力
@@ -15,6 +15,9 @@ public class Singleton
 
     public int enemy1MaxHp = 10; //エネミー1の最大HP
     public int enemy1Hp = 10; //エネミー1の現在HP
+
+    public int boss1MaxHp = 100;
+    public int boss1Hp = 100;
 
     public int playerExp = 0;
     public int playerLv = 1;

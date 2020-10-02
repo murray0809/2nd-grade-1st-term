@@ -16,8 +16,8 @@ public class Boss2Manager : MonoBehaviour
 
     [SerializeField] Animator anim;
 
-    [SerializeField] int maxHp;
-    [SerializeField] int hp;
+    [SerializeField] public int maxHp;
+    [SerializeField] public int hp;
 
     public Button attackBotton = default;
     public Button magicBotton = default;
@@ -43,6 +43,11 @@ public class Boss2Manager : MonoBehaviour
     public Material skybox5;
 
     public bool isAttaking = false;
+
+    public bool playerAttack = false;
+    public bool playerMagic = false;
+    public bool playerHeal = false;
+    float count;
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -124,10 +129,42 @@ public class Boss2Manager : MonoBehaviour
         {
             RenderSettings.skybox = skybox5;
         }
+
+        if (playerAttack)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerAttack = false;
+            }
+        }
+        else if (playerMagic)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerMagic = false;
+            }
+        }
+        else if (playerHeal)
+        {
+            playerATB.value = 0;
+            count += 0.1f;
+            if (count > 10f)
+            {
+                count = 0;
+                playerHeal = false;
+            }
+        }
     }
 
     public void Attack()
     {
+        playerAttack = true;
         singleton.attack = true;
         hp = hp - singleton.playerAtk;
         Debug.Log("プレイヤー攻撃" + hp);
@@ -143,8 +180,9 @@ public class Boss2Manager : MonoBehaviour
 
     public void Magic()
     {
+        playerMagic = true;
         singleton.magic = true;
-        hp = hp - 10;
+        hp = hp - singleton.playerCurrentMp;
         Debug.Log("プレイヤーまほう" + hp);
         enemySlider.value = (float)hp / (float)maxHp;
         //if (hp <= 0)
@@ -164,8 +202,9 @@ public class Boss2Manager : MonoBehaviour
 
     public void Item()
     {
+        playerHeal = true;
         singleton.item = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
+        singleton.playerCurrentHp = singleton.playerCurrentHp + 5;
         Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
         playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         playerATB.value = 0;
