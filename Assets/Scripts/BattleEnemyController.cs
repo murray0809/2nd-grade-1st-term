@@ -29,7 +29,7 @@ public class BattleEnemyController : MonoBehaviour
 
     Vector3 startPos = new Vector3(-2f, 0f, -6f);
     Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
-    Vector3 playerPos = new Vector3(1f, 0f, -8f);
+    Vector3 playerPos = new Vector3(1f, 1f, -8f);
 
     public GameObject attackEffect;
     public GameObject magicEffect;
@@ -58,6 +58,10 @@ public class BattleEnemyController : MonoBehaviour
 
     void Update()
     {
+        //if (manager.hp <= 0)
+        //{
+        //    Time.timeScale = 0f;
+        //}
 
         manager.enemyATB.value += ATBspeed * Time.deltaTime;
         if (attack || magic || heal)
@@ -110,14 +114,12 @@ public class BattleEnemyController : MonoBehaviour
             anim.SetBool("Magic", true);
             magicCount += 0.1f;
             Debug.Log(magicCount);
-            if (magicCount > 10f)
-            {
-                
-            }
-
+            
             if (magicCount > 18f)
             {
                 MagicEffect();
+                singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
+                manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
                 magic = false;
                 magicCount = 0;
             }
@@ -136,6 +138,12 @@ public class BattleEnemyController : MonoBehaviour
             if (healCount > 18f)
             {
                 HealEffect();
+                manager.hp = manager.hp + hpUp;
+                manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+                if (manager.hp > manager.maxHp)
+                {
+                    manager.hp = manager.maxHp;
+                }
                 heal = false;
                 healCount = 0;
             }
@@ -174,10 +182,6 @@ public class BattleEnemyController : MonoBehaviour
         magic = true;
         manager.isAttaking = true;
 
-        
-
-        singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
-        manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
         manager.enemyATB.value = 0;
     }
 
@@ -185,8 +189,7 @@ public class BattleEnemyController : MonoBehaviour
     {
         heal = true;
         manager.isAttaking = true;
-        manager.hp = manager.hp + hpUp;
-        manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+       
         manager.enemyATB.value = 0;
     }
 

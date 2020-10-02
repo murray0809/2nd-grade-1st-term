@@ -113,6 +113,8 @@ public class Boss2Controller : MonoBehaviour
             if (magicEffectCount > 3f)
             {
                 AttackEffect();
+                singleton.playerCurrentHp = singleton.playerCurrentHp - atk;
+                manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
                 attackEffectFlag = false;
                 magicEffectCount = 0;
             }
@@ -148,6 +150,8 @@ public class Boss2Controller : MonoBehaviour
             if (magicEffectCount > 20f)
             {
                 MagicEffect();
+                singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
+                manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
                 magicEffectFlag = false;
                 magicEffectCount = 0;
             }
@@ -161,6 +165,12 @@ public class Boss2Controller : MonoBehaviour
             if (healCount > 20f)
             {
                 HealEffect();
+                manager.hp = manager.hp + hpUp;
+                manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+                if (manager.hp > manager.maxHp)
+                {
+                    manager.hp = manager.maxHp;
+                }
                 heal = false;
                 atb = true;
                 healCount = 0;
@@ -176,8 +186,7 @@ public class Boss2Controller : MonoBehaviour
     {
         attack = true;
         attackEffectFlag = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - atk;
-        manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+        
         manager.enemyATB.value = 0;
     }
 
@@ -185,16 +194,14 @@ public class Boss2Controller : MonoBehaviour
     {
         magic = true;
         magicEffectFlag = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
-        manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+        
         manager.enemyATB.value = 0;
     }
 
     void Heal()
     {
         heal = true;
-        manager.hp = manager.hp + hpUp;
-        manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+       
         manager.enemyATB.value = 0;
     }
 

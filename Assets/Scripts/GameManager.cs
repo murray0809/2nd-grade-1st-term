@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public Slider enemyATB = default;
 
-    public float ATBspeed = 0.1f;
+    public float ATBspeed;
 
     public GameObject instance = default;
 
@@ -53,9 +53,17 @@ public class GameManager : MonoBehaviour
     public GameObject magicEffect;
     public GameObject healEffect;
 
-    Vector3 enemyPos = new Vector3(-2f, 0f, -6.5f);
+    bool attackEffectFlag = false;
+    bool magicEffectFlag = false;
+    bool healEffectFlag = false;
+
+    float attackCount = 0;
+    float magicCount = 0;
+    float healCount = 0;
+
+    Vector3 enemyPos = new Vector3(-2f, 1f, -6.5f);
     Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
-    Vector3 playerPos = new Vector3(1f, 0f, -8f);
+    Vector3 playerPos = new Vector3(1f, 1f, -8f);
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -83,21 +91,23 @@ public class GameManager : MonoBehaviour
 
         pointer = pointerScript.count;
 
-        battleStatusText = new Text[4];
-        battleStatusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
-        battleStatusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
-        battleStatusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
-        battleStatusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
+        //battleStatusText = new Text[4];
+        //battleStatusText[0] = GameObject.Find("HPdemo").GetComponent<Text>();
+        //battleStatusText[1] = GameObject.Find("MPdemo").GetComponent<Text>();
+        //battleStatusText[2] = GameObject.Find("ATKdemo").GetComponent<Text>();
+        //battleStatusText[3] = GameObject.Find("DEFdemo").GetComponent<Text>();
 
         singleton = Singleton.Instance;
+
+        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
     }
 
     void Update()
     {
-        battleStatusText[0].text = "HP:" + singleton.playerCurrentHp;
-        battleStatusText[1].text = "MP:" + singleton.playerCurrentMp;
-        battleStatusText[2].text = "ATK:" + singleton.playerAtk;
-        battleStatusText[3].text = "DEF:" + singleton.playerDef;
+        //battleStatusText[0].text = "HP:" + singleton.playerCurrentHp;
+        //battleStatusText[1].text = "MP:" + singleton.playerCurrentMp;
+        //battleStatusText[2].text = "ATK:" + singleton.playerAtk;
+        //battleStatusText[3].text = "DEF:" + singleton.playerDef;
 
         pointer = pointerScript.count;
 
@@ -152,7 +162,8 @@ public class GameManager : MonoBehaviour
         {
             playerATB.value = 0;
             count += 0.1f;
-            if (count > 10f)
+
+            if (count > 5f)
             {
                 count = 0;
                 playerAttack = false;
@@ -162,6 +173,7 @@ public class GameManager : MonoBehaviour
         {
             playerATB.value = 0;
             count += 0.1f;
+            
             if (count > 10f)
             {
                 count = 0;
@@ -172,11 +184,69 @@ public class GameManager : MonoBehaviour
         {
             playerATB.value = 0;
             count += 0.1f;
+            
             if (count > 10f)
             {
                 count = 0;
                 playerHeal = false;
             }
+        }
+
+        if (attackEffectFlag)
+        {
+            attackCount += 0.1f;
+            if (attackCount > 1f)
+            {
+                AttackEffect();
+                attackCount = 0;
+                hp = hp - singleton.playerAtk;
+                Debug.Log("プレイヤー攻撃" + hp);
+                enemySlider.value = (float)hp / (float)maxHp;
+                attackEffectFlag = false;
+            }
+        }
+        if (magicEffectFlag)
+        {
+            magicCount += 0.1f;
+            if (magicCount > 15f)
+            {
+                MagicEffect();
+                magicCount = 0;
+                hp = hp - 10;
+                Debug.Log("プレイヤーまほう" + hp);
+                enemySlider.value = (float)hp / (float)maxHp;
+                magicEffectFlag = false;
+            }
+        }
+        if (healEffectFlag)
+        {
+            healCount += 0.1f;
+            if (healCount > 5f)
+            {
+                HealEffect();
+                healCount = 0;
+                singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
+                if (singleton.playerCurrentHp > singleton.playerMaxHp)
+                {
+                    singleton.playerCurrentHp = singleton.playerMaxHp;
+                }
+                Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
+                playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+                healEffectFlag = false;
+            }
+        }
+
+        if (hp <= 0)
+        {
+            Destroy(enemy);
+            Invoke("Win", 1f);
+            //singleton.playerExp += 400;
+
+            //if (singleton.playerExp % 400 == 0)
+            //{
+            //    LvUp();
+            //}
+
         }
     }
 
@@ -184,51 +254,46 @@ public class GameManager : MonoBehaviour
     {
         
         playerAttack = true;
-        hp = hp - singleton.playerAtk;
-        Debug.Log("プレイヤー攻撃" + hp);
-        enemySlider.value = (float)hp / (float)maxHp;
-        if (hp <= 0)
-        {
-            enemySlider.gameObject.SetActive(false);
-            Win();
-            SceneManager.LoadScene("Island");
-        }
+        attackEffectFlag = true;
+
+        //if (hp <= 0)
+        //{
+        //    Invoke("Win", 1f);
+
+        //}
         playerATB.value = 0;
     }
 
     public void Magic()
     {
         playerMagic = true;
-        hp = hp - 10;
-        Debug.Log("プレイヤーまほう" + hp);
-        enemySlider.value = (float)hp / (float)maxHp;
-        if (hp <= 0)
-        {
-            enemySlider.gameObject.SetActive(false);
-            Win();
-            singleton.playerExp += 400;
+        magicEffectFlag = true;
 
-            if (singleton.playerExp % 400 == 0)
-            {
-                LvUp();
-            }
-            SceneManager.LoadScene("Island");
-        }
+        //if (hp <= 0)
+        //{
+        //    Invoke("Win", 1f);
+        //    //singleton.playerExp += 400;
+
+        //    //if (singleton.playerExp % 400 == 0)
+        //    //{
+        //    //    LvUp();
+        //    //}
+
+        //}
         playerATB.value = 0;
     }
 
     public void Item()
     {
         playerHeal = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
-        Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
-        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+        healEffectFlag = true;
         playerATB.value = 0;
     }
 
     void Win()
     {
         singleton.deathFlag = true;
+        SceneManager.LoadScene("Island");
         Debug.Log("Win");
     }
 

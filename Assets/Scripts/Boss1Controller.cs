@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Boss1Controller : MonoBehaviour
 {
-    [SerializeField] float ATBspeed = 0.1f;
+    [SerializeField] float ATBspeed;
 
     [SerializeField] int atk;
     [SerializeField] int mp;
@@ -31,6 +31,18 @@ public class Boss1Controller : MonoBehaviour
     public GameObject attackEffect;
     public GameObject magicEffect;
     public GameObject healEffect;
+
+    bool attackEffectFlag = false;
+    bool magicEffectFlag = false;
+    bool healEffectFlag = false;
+
+    //float attackCount = 0;
+    //float magicCount = 0;
+    //float healCount = 0;
+
+    //Vector3 enemyPos = new Vector3(-2f, 1f, -6.5f);
+    //Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
+    //Vector3 playerPos = new Vector3(1f, 1f, -8f);
 
     Singleton singleton;
     
@@ -78,6 +90,8 @@ public class Boss1Controller : MonoBehaviour
             if (attackCount > 20f)
             {
                 AttackEffect();
+                singleton.playerCurrentHp = singleton.playerCurrentHp - atk;
+                manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
                 attack = false;
                 attackCount = 0;
             }
@@ -95,6 +109,8 @@ public class Boss1Controller : MonoBehaviour
             if (magicCount > 20f)
             {
                 MagicEffect();
+                singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
+                manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
                 magic = false;
                 magicCount = 0;
             }
@@ -112,6 +128,12 @@ public class Boss1Controller : MonoBehaviour
             if (healCount > 20f)
             {
                 HealEffect();
+                manager.hp = manager.hp + hpUp;
+                manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+                if (manager.hp > manager.maxHp)
+                {
+                    manager.hp = manager.maxHp;
+                }
                 heal = false;
                 healCount = 0;
             }
@@ -125,24 +147,21 @@ public class Boss1Controller : MonoBehaviour
     void Attack()
     {
         attack = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - atk;
-        manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+       
         manager.enemyATB.value = 0;
     }
 
     void Magic()
     {
         magic = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp - mp;
-        manager.playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+       
         manager.enemyATB.value = 0;
     }
 
     void Heal()
     {
         heal = true;
-        manager.hp = manager.hp + hpUp;
-        manager.enemySlider.value = (float)manager.hp / (float)manager.maxHp;
+        
         manager.enemyATB.value = 0;
     }
 

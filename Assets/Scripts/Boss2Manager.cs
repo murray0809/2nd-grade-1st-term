@@ -30,7 +30,7 @@ public class Boss2Manager : MonoBehaviour
 
     public Slider enemyATB = default;
 
-    public float ATBspeed = 0.1f;
+    public float ATBspeed;
 
     public GameObject instance = default;
 
@@ -48,6 +48,22 @@ public class Boss2Manager : MonoBehaviour
     public bool playerMagic = false;
     public bool playerHeal = false;
     float count;
+
+    public GameObject attackEffect;
+    public GameObject magicEffect;
+    public GameObject healEffect;
+
+    bool attackEffectFlag = false;
+    bool magicEffectFlag = false;
+    bool healEffectFlag = false;
+
+    float attackCount = 0;
+    float magicCount = 0;
+    float healCount = 0;
+
+    Vector3 enemyPos = new Vector3(-2f, 1f, -6.5f);
+    Vector3 attackPos = new Vector3(0.2f, 0f, -7.5f);
+    Vector3 playerPos = new Vector3(1f, 1f, -8f);
     void Start()
     {
         player = GameObject.Find("BattlePlayer");
@@ -74,6 +90,8 @@ public class Boss2Manager : MonoBehaviour
         anim = GetComponent<Animator>();
 
         singleton = Singleton.Instance;
+
+        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
     }
 
     void Update()
@@ -82,7 +100,7 @@ public class Boss2Manager : MonoBehaviour
 
         playerATB.value += ATBspeed * Time.deltaTime;
 
-        enemyATB.value += ATBspeed * Time.deltaTime;
+        //enemyATB.value += ATBspeed * Time.deltaTime;
 
 
         attackBotton.enabled = false;
@@ -134,7 +152,7 @@ public class Boss2Manager : MonoBehaviour
         {
             playerATB.value = 0;
             count += 0.1f;
-            if (count > 10f)
+            if (count > 5f)
             {
                 count = 0;
                 playerAttack = false;
@@ -160,15 +178,59 @@ public class Boss2Manager : MonoBehaviour
                 playerHeal = false;
             }
         }
+
+        if (attackEffectFlag)
+        {
+            attackCount += 0.1f;
+            if (attackCount > 1f)
+            {
+                AttackEffect();
+                attackCount = 0;
+                hp = hp - singleton.playerAtk;
+                Debug.Log("プレイヤー攻撃" + hp);
+                enemySlider.value = (float)hp / (float)maxHp;
+                attackEffectFlag = false;
+            }
+        }
+        if (magicEffectFlag)
+        {
+            magicCount += 0.1f;
+            if (magicCount > 15f)
+            {
+                MagicEffect();
+                magicCount = 0;
+                hp = hp - 10;
+                Debug.Log("プレイヤーまほう" + hp);
+                enemySlider.value = (float)hp / (float)maxHp;
+                magicEffectFlag = false;
+            }
+        }
+        if (healEffectFlag)
+        {
+            healCount += 0.1f;
+            if (healCount > 5f)
+            {
+                HealEffect();
+                healCount = 0;
+                singleton.playerCurrentHp = singleton.playerCurrentHp + 1;
+                if (singleton.playerCurrentHp > singleton.playerMaxHp)
+                {
+                    singleton.playerCurrentHp = singleton.playerMaxHp;
+                }
+                Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
+                playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+                healEffectFlag = false;
+            }
+        }
     }
 
     public void Attack()
     {
         playerAttack = true;
+
+        attackEffectFlag = true;
         singleton.attack = true;
-        hp = hp - singleton.playerAtk;
-        Debug.Log("プレイヤー攻撃" + hp);
-        enemySlider.value = (float)hp / (float)maxHp;
+       
         //if (singleton.enemy1Hp <= 0)
         //{
         //    enemySlider.gameObject.SetActive(false);
@@ -182,9 +244,7 @@ public class Boss2Manager : MonoBehaviour
     {
         playerMagic = true;
         singleton.magic = true;
-        hp = hp - singleton.playerCurrentMp;
-        Debug.Log("プレイヤーまほう" + hp);
-        enemySlider.value = (float)hp / (float)maxHp;
+        magicEffectFlag = true;
         //if (hp <= 0)
         //{
         //    enemySlider.gameObject.SetActive(false);
@@ -204,9 +264,7 @@ public class Boss2Manager : MonoBehaviour
     {
         playerHeal = true;
         singleton.item = true;
-        singleton.playerCurrentHp = singleton.playerCurrentHp + 5;
-        Debug.Log("プレイヤーアイテム" + singleton.playerCurrentHp);
-        playerSlider.value = (float)singleton.playerCurrentHp / (float)singleton.playerMaxHp;
+        healEffectFlag = true;
         playerATB.value = 0;
     }
 
@@ -220,5 +278,19 @@ public class Boss2Manager : MonoBehaviour
     {
         singleton.playerLv++;
         Debug.Log("LvUp" + singleton.playerLv);
+    }
+
+    void AttackEffect()
+    {
+        Instantiate(attackEffect, enemyPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+    void MagicEffect()
+    {
+        Instantiate(magicEffect, enemyPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
+    }
+
+    void HealEffect()
+    {
+        Instantiate(healEffect, playerPos, Quaternion.identity); //パーティクル用ゲームオブジェクト生成
     }
 }
